@@ -4,7 +4,7 @@ import { run, closeBd, database } from "../../config/dbConnection.js";
 const conn = () => { run().catch(console.dir); };
 
 async function createCollectionValidate() {
-    if (!database.collection("users")) {
+    if (!database.collection("projects")) {
         database.createCollection("projects", {
             validator: {
                 $jsonSchema: {
