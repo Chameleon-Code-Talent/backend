@@ -1,4 +1,4 @@
-import { Int32 } from "mongodb";
+import { Int32, ObjectId } from "mongodb";
 import { run, closeBd, database } from "../../config/dbConnection.js";
 
 const conn = () => { run().catch(console.dir); };
@@ -53,5 +53,19 @@ async function createCollectionValidate() {
         })
     }
 };
+
+/* 
+{
+  "name": "Igor",
+  "password": "123",
+  "email": "igor@hotmail.com",
+  "github": "igoryan260",
+  "phone": 11940047115,
+  "description": "Gosto de trabalhar com design",
+  "cv": "Engenheiro",
+  "services": "Mecânica",
+  "skills": "HTML, CSS, JS"
+}
+*/
 
 export default createCollectionValidate;

@@ -1,4 +1,4 @@
-import { Int32 } from "mongodb";
+import { Int32, ObjectId } from "mongodb";
 import { run, closeBd, database } from "../../config/dbConnection.js";
 
 const conn = () => { run().catch(console.dir); };
@@ -10,8 +10,12 @@ async function createCollectionValidate() {
                 $jsonSchema: {
                     bsonType: "object",
                     title: "Users object validation",
-                    required: ["thumbnail", "title", "technologies", "description"],
+                    required: ["id_user", "thumbnail", "title", "technologies", "description"],
                     properties: {
+                        id_user: {
+                            bsonType: String,
+                            description: "'id_user' must be a String and is required"
+                        },
                         thumbnail: {
                             bsonType: String,
                             description: "'thumbnail' is required"
