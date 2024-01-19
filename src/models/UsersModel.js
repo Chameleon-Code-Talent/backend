@@ -10,19 +10,19 @@ async function createCollectionValidate() {
                 $jsonSchema: {
                     bsonType: "object",
                     title: "Users object validation",
-                    required: ["name", "password", "email", "phone", "description", "services", "skills"],
+                    required: ["name", "occupation_area", "password", "email", "phone", "description"],
                     properties: {
                         name: {
                             bsonType: String,
                             description: "'name' must be a string and is required"
                         },
-                        password: {
-                            bsonType: String,
-                            description: "'password' is required"
-                        },
                         email: {
                             bsonType: String,
                             description: "'email' is required"
+                        },
+                        occupation_area: {
+                            bsonType: String,
+                            description: "'Occupation area must be a string and is required '"
                         },
                         github: {
                             bsonType: String
@@ -39,13 +39,15 @@ async function createCollectionValidate() {
                             bsonType: String,
                             description: "'cv' file not found"
                         },
-                        services: {
-                            bsontype: String,
-                            description: "'services' is required"
+                        logo: {
+                            bsonType: String
                         },
-                        skills: {
+                        logo_layout: {
+                            bsonType: String
+                        },
+                        password: {
                             bsonType: String,
-                            description: "'skills' is required"
+                            description: "'password' is required"
                         }
                     }
                 }

@@ -24,9 +24,15 @@ async function createCollectionValidate() {
                             bsonType: String,
                             description: "'title' is required"
                         },
+                        project_link: {
+                            bsonType: String
+                        },
                         project_images: {
                             bsonType: String,
                             description: "'project_images' filed not found"
+                        },
+                        other_technologie: {
+                            bsonType: String
                         },
                         technologies: {
                             bsonType: String,
