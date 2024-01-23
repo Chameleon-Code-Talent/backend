@@ -1,5 +1,4 @@
 import express from "express";
-import { run, closeBd, database } from "../../config/dbConnection.js";
 import ServicesController from "../controller/ServicesController.js";
 
 const route = express.Router();
