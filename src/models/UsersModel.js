@@ -1,4 +1,3 @@
-import { Int32, ObjectId } from "mongodb";
 import { run, closeBd, database } from "../../config/dbConnection.js";
 
 const conn = () => { run().catch(console.dir); };
@@ -13,40 +12,40 @@ async function createCollectionValidate() {
                     required: ["name", "occupation_area", "password", "email", "phone", "description"],
                     properties: {
                         name: {
-                            bsonType: String,
+                            bsonType: "string",
                             description: "'name' must be a string and is required"
                         },
                         email: {
-                            bsonType: String,
+                            bsonType: "string",
                             description: "'email' is required"
                         },
                         occupation_area: {
-                            bsonType: String,
+                            bsonType: "string",
                             description: "'Occupation area must be a string and is required '"
                         },
                         github: {
-                            bsonType: String
+                            bsonType: "string"
                         },
                         phone: {
-                            bsonType: Int32,
+                            bsonType: "int",
                             description: "'phone' must be a number and is required"
                         },
                         description: {
-                            bsonType: String,
+                            bsonType: "string",
                             description: "'about me' is required"
                         },
                         cv: {
-                            bsonType: String,
+                            bsonType: "string",
                             description: "'cv' file not found"
                         },
                         logo: {
-                            bsonType: String
+                            bsonType: "string"
                         },
                         logo_layout: {
-                            bsonType: String
+                            bsonType: "string"
                         },
                         password: {
-                            bsonType: String,
+                            bsonType: "string",
                             description: "'password' is required"
                         }
                     }
@@ -55,19 +54,5 @@ async function createCollectionValidate() {
         })
     }
 };
-
-/* 
-{
-  "name": "Igor",
-  "password": "123",
-  "email": "igor@hotmail.com",
-  "github": "igoryan260",
-  "phone": 11940047115,
-  "description": "Gosto de trabalhar com design",
-  "cv": "Engenheiro",
-  "services": "Mecânica",
-  "skills": "HTML, CSS, JS"
-}
-*/
 
 export default createCollectionValidate;

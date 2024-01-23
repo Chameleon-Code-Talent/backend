@@ -13,20 +13,17 @@ async function createCollectionValidate() {
                     required: ["id_user", "services"],
                     properties: {
                         id_user: {
-                            bsonType: String,
+                            bsonType: "string",
                             description: "'id_user' must be a String and is required"
                         },
                         services: {
-                            bsonType: String,
+                            bsonType: "array",
                             description: "Services id required"
-                        },
-                        icon_service: {
-                            bsonType: String
                         }
                     }
                 }
             }
-        });
+        })
     }
 };
 export default createCollectionValidate;

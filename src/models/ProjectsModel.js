@@ -13,33 +13,33 @@ async function createCollectionValidate() {
                     required: ["id_user", "thumbnail", "title", "technologies", "description"],
                     properties: {
                         id_user: {
-                            bsonType: String,
-                            description: "'id_user' must be a String and is required"
+                            bsonType: "string",
+                            description: "'id_user' must be a string and is required"
                         },
                         thumbnail: {
-                            bsonType: String,
+                            bsonType: "string",
                             description: "'thumbnail' is required"
                         },
                         title: {
-                            bsonType: String,
+                            bsonType: "string",
                             description: "'title' is required"
                         },
                         project_link: {
-                            bsonType: String
+                            bsonType: "string"
                         },
                         project_images: {
-                            bsonType: String,
+                            bsonType: "array",
                             description: "'project_images' filed not found"
                         },
-                        other_technologie: {
-                            bsonType: String
-                        },
                         technologies: {
-                            bsonType: String,
+                            bsonType: "string",
                             description: "'technologies' is required"
                         },
+                        icon_technologies: {
+                            bsonType: "array"
+                        },
                         description: {
-                            bsonType: Int32,
+                            bsonType: "string",
                             description: "'description' is required"
                         },
                     }
