@@ -34,7 +34,7 @@ class ServiceController {
             res.status(200).json(result);
             await closeBd();
         } catch (err) {
-            res.status(500).json({ message: "Server error", error: err });
+            res.status(500).json({ message: "Server error", error: err.message });
         };
     };
 

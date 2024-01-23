@@ -35,7 +35,10 @@ class UserController {
             res.status(200).json(result);
             await closeBd();
         } catch (err) {
-            res.status(500).json({ message: "Server error", error: err });
+
+            //catching validation error
+            console.log(err.errInfo.details.schemaRulesNotSatisfied[0]);
+            res.status(500).json({ message: "Server error", error: err.message });
         };
     };
 
