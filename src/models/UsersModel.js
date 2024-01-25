@@ -9,7 +9,7 @@ async function createCollectionValidate() {
                 $jsonSchema: {
                     bsonType: "object",
                     title: "Users object validation",
-                    required: ["name", "occupation_area", "password", "email", "phone", "description"],
+                    required: ["name", "password", "email"],
                     properties: {
                         name: {
                             bsonType: "string",
