@@ -76,6 +76,12 @@ class UserController {
             await run();
 
             const userFound = await collection.findOne({ "email": email });
+
+            //return null
+            if (!userFound) {
+                return res.status(404).json({ message: "User not found" })
+            }
+
             //comparations hashs
 
             const checkPassword = await bcrypt.compare(password, userFound.password)
