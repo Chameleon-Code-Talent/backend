@@ -25,6 +25,12 @@ class UserController {
             await run();
             const user = new ObjectId(req.params.id);
             const result = await collection.findOne({ "_id": user });
+
+            //return null
+            if (!result) {
+                return res.status(404).json({ message: "User not found!" });
+            }
+
             await closeBd();
             res.status(200).json(result);
         } catch (err) {
