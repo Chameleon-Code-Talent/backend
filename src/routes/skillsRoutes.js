@@ -1,6 +1,7 @@
 import express from "express";
 import { run, closeBd, database } from "../../config/dbConnection.js";
 import SkillsController from "../controller/SkillsController.js";
+import errorManipulation from "../middlewares/errorManipulation.js";
 
 const route = express.Router();
 
@@ -9,5 +10,7 @@ route.get("/skills/:id", SkillsController.searchSkillById);
 route.post("/skills", SkillsController.registerSkill);
 route.put("/skills/:id", SkillsController.updateSkill);
 route.delete("/skills/:id", SkillsController.deleteSkill);
+
+route.use(errorManipulation);
 
 export default route;
