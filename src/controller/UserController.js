@@ -83,7 +83,6 @@ class UserController {
             }
 
             //comparations hashs
-
             const checkPassword = await bcrypt.compare(password, userFound.password)
             console.log(checkPassword);
 
@@ -97,7 +96,7 @@ class UserController {
                 const id = String(userFound._id)
                 const itoken = jwt.sign({ id }, process.env.SECRET_KEY)
                 await closeBd();
-                res.status(200).json(itoken);
+                res.status(200).json({ token: itoken, id_user: id });
             } else {
                 await closeBd();
                 res.status(404).json({ message: "User not found" });
