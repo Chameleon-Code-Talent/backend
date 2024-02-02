@@ -48,7 +48,13 @@ class UserController {
 
             req.body.password = passwordHash;
 
+            //create a new unique token for the user
+            let uniquetoken = await bcrypt.genSalt(12)
+
+            //saving unique token in new user
             const newUser = req.body;
+            newUser.token = uniquetoken;
+
             await run();
             const result = await collection.insertOne(newUser);
 
@@ -56,6 +62,8 @@ class UserController {
             res.status(200).json(result);
             await closeBd();
         } catch (err) {
+            console.log(err)
+
             //catching validation error            
             await closeBd();
             next(err)
