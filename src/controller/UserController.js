@@ -42,6 +42,11 @@ class UserController {
 
     static async registerUser(req, res, next) {
         try {
+            //verify filled fields
+            if (req.body.email == "" || req.body.password == "" || req.body.name) {
+                return res.status(400).json({ message: "some mandatory fields were not filled in" })
+            }
+
             //generate salt 12 bits and password criptograph
             const salt = await bcrypt.genSalt(12);
             const passwordHash = await bcrypt.hash(req.body.password, salt)
