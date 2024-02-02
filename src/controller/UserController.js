@@ -1,7 +1,7 @@
 import { run, closeBd, database } from "../../config/dbConnection.js";
 import { BSON, ObjectId } from "mongodb";
 import jwt from "jsonwebtoken";
-import verifyToken from "../middlewares/verifyToken.js";
+//import verifyToken from "../middlewares/verifyToken.js";
 import bcrypt from "bcrypt";
 
 const collection = database.collection("users");
@@ -103,7 +103,6 @@ class UserController {
 
             //comparations hashs
             const checkPassword = await bcrypt.compare(password, userFound.password)
-            console.log(checkPassword);
 
             //validate password
             if (!checkPassword) {
@@ -112,10 +111,15 @@ class UserController {
 
             //user found or not found
             if (userFound) {
+
+                //get unique private token in collection 'users' for create public token
+                const uniqueToken = userFound.token;
+                //console.log(uniqueToken);
+
                 const id = String(userFound._id)
-                const itoken = jwt.sign({ id }, process.env.SECRET_KEY)
+                const token = jwt.sign({ id }, uniqueToken)
                 await closeBd();
-                res.status(200).json({ token: itoken, id_user: id });
+                res.status(200).json({ token: token, id_user: id });
             } else {
                 await closeBd();
                 res.status(404).json({ message: "User not found" });

@@ -39,7 +39,7 @@ function errorManipulation(erro, req, res, next) {
     }
 
     //error token
-    if (erro.message === "invalid signature" || erro.message === "invalid token") {
+    if (erro.message === "invalid signature" || erro.message === "invalid token" || erro.message === "secret or public key must be provided") {
         return new AccessError().sendResponse(res);
     } else {
         new BaseError().sendResponse(res);
