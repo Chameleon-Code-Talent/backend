@@ -14,7 +14,7 @@ route.get("/users/:id", UserController.searchUserById);
 route.post("/auth/user", UserController.userAuthentication);
 route.post("/users", UserController.registerUser);
 route.put("/users/:id", verifyToken, UserController.updateUser);
-route.delete("/users/:id", UserController.deleteUser);
+route.delete("/users/:id", verifyToken, UserController.deleteUser);
 
 //route for error manipulations
 route.use(errorManipulation);
