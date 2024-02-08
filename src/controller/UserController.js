@@ -24,7 +24,8 @@ class UserController {
         try {
             await run();
             const user = new ObjectId(req.params.id);
-            const result = await collection.findOne({ "_id": user });
+            //result without showing sensitive data
+            const result = await collection.findOne({ "_id": user }, { projection: { password: 0, token: 0 } });
 
             //return null
             if (!result) {
@@ -73,8 +74,6 @@ class UserController {
             res.status(200).json(result);
             await closeBd();
         } catch (err) {
-            console.log(err)
-
             //catching validation error            
             await closeBd();
             next(err)
@@ -111,7 +110,6 @@ class UserController {
 
             //user found or not found
             if (userFound) {
-
                 //get unique private token in collection 'users' for create public token
                 const uniqueToken = userFound.token;
                 //console.log(uniqueToken);
@@ -145,11 +143,10 @@ class UserController {
                 res.status(200).json({ mensage: "User updated successfully" });
             } else {
                 //if is user was modified
-                res.status(404).json({ message: "User not modified" });
+                res.status(400).json({ message: "User not modified" });
             }
             await closeBd();
         } catch (err) {
-            console.error(err)
             await closeBd();
             next(err)
         };

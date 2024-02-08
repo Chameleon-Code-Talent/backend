@@ -9,6 +9,9 @@ import ValidationError from "./errors/ValidationError.js";
 
 
 function errorManipulation(erro, req, res, next) {
+
+    console.log({ MensagemErro: erro })
+
     //mongodb errors
     if (erro instanceof BSON.BSONError) {
         return new BSONErrorManipulation(erro).sendResponse(res);
@@ -39,7 +42,11 @@ function errorManipulation(erro, req, res, next) {
     }
 
     //error token
-    if (erro.message === "invalid signature" || erro.message === "invalid token" || erro.message === "secret or public key must be provided") {
+    if (
+        erro.message === "invalid signature" ||
+        erro.message === "invalid token" ||
+        erro.message === "secret or public key must be provided" ||
+        erro.message === "jwt must be provided") {
         return new AccessError().sendResponse(res);
     } else {
         new BaseError().sendResponse(res);

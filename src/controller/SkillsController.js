@@ -34,9 +34,58 @@ class SkillController {
 
     static async registerSkill(req, res, next) {
         try {
+            //verify filled fields
+            if (req.body.id_user == "" || req.body.skills == "") {
+                return res.status(400).json({ message: "some mandatory fields were not filled in" })
+            }
+
             const newSkill = req.body;
-            const id_user = new ObjectId(newSkill.id_user);
+            //variable where the new skill will be saved
+            let addSkill;
+            let addIconSkill;
+
             await run();
+            //verify skills exists
+            const skillExists = await collection.find().toArray();
+
+            if (skillExists[0]) {
+                //get id of the skill document and skill data
+                const IdDocument = new ObjectId(skillExists[0]._id);
+                const skillsExistsInTheDocument = skillExists[0].skills;
+                const iconSkillExistsInTheDocument = skillExists[0].icon_skill;
+
+                //comparing array of existing and new skills to find out if it already exists
+                addSkill = newSkill.skills
+                    .filter(skill => !skillsExistsInTheDocument
+                        .includes(skill));
+
+                //comparing array of existing and new icons skills to find out if it already exists
+                addIconSkill = newSkill.icon_skill
+                    .filter(icon_skill => !iconSkillExistsInTheDocument
+                        .includes(icon_skill));
+
+                //push the array to save new information without losing existing information
+
+                skillsExistsInTheDocument.forEach(e => {
+                    addSkill.push(e);
+                });
+
+                iconSkillExistsInTheDocument.forEach(e => {
+                    addIconSkill.push(e)
+                });
+
+                //insert new changes in the document
+                const modifiedSkill = {
+                    "skills": addSkill,
+                    "icon_skill": addIconSkill
+                }
+
+                const result = await collection.updateOne({ "_id": IdDocument }, { $set: modifiedSkill });
+                await closeBd();
+                return res.status(200).json({ message: "New skills inserted succesfully" })
+            }
+
+            const id_user = new ObjectId(newSkill.id_user);
 
             //check if the user exists to add the new project
             const checkUserExists = await collectionUser.findOne({ "_id": id_user })
