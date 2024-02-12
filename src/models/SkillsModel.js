@@ -9,7 +9,7 @@ async function createCollectionValidate() {
                 $jsonSchema: {
                     bsonType: "object",
                     title: "Skills object validation",
-                    required: ["id_user", "skills"],
+                    required: ["id_user", "skills", "icon_skill"],
                     properties: {
                         id_user: {
                             bsonType: "string",
@@ -20,7 +20,8 @@ async function createCollectionValidate() {
                             description: "'Skill' is required"
                         },
                         icon_skill: {
-                            bsonType: "array"
+                            bsonType: "array",
+                            description: "'Icon skill' is required"
                         }
                     }
                 }
