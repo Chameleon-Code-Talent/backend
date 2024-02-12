@@ -34,9 +34,58 @@ class ServiceController {
 
     static async registerService(req, res, next) {
         try {
+            //verify filled fields
+            if (req.body.id_user == "" || req.body.services == "") {
+                return res.status(400).json({ message: "some mandatory fields were not filled in" })
+            }
+
             const newService = req.body;
-            const id_user = new ObjectId(newService.id_user);
+
+            //variable where the new service will be saved
+            let addService;
+            let addIconService;
+
             await run();
+            //verify services exists
+            const servicesExists = await collection.find().toArray();
+
+            if (servicesExists[0]) {
+                //get id of the skill document and skill data
+                const IdDocument = new ObjectId(servicesExists[0]._id);
+                const servicesExistsInTheDocument = servicesExists[0].services;
+                const iconServicesExistsInTheDocument = servicesExists[0].icon_service;
+
+                //comparing array of existing and new services to find out if it already exists
+                addService = newService.services
+                    .filter(service => !servicesExistsInTheDocument
+                        .includes(service));
+
+                //comparing array of existing and new icons services to find out if it already exists
+                addIconService = newService.icon_service
+                    .filter(icon_service => !iconServicesExistsInTheDocument
+                        .includes(icon_service));
+
+                //push the array to save new information without losing existing information
+                servicesExistsInTheDocument.forEach(e => {
+                    addService.push(e);
+                });
+
+                iconServicesExistsInTheDocument.forEach(e => {
+                    addIconService.push(e)
+                });
+
+                //insert new changes in the document
+                const modifiedService = {
+                    "services": addService,
+                    "icon_service": addIconService
+                }
+
+                const result = await collection.updateOne({ "_id": IdDocument }, { $set: modifiedService });
+                await closeBd();
+                return res.status(200).json({ message: "New services inserted succesfully" })
+            }
+
+            const id_user = new ObjectId(newService.id_user);
 
             //check if the user exists to add the new project
             const checkUserExists = await collectionUser.findOne({ "_id": id_user })
