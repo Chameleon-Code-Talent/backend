@@ -39,6 +39,12 @@ class ProjectController {
             const id_user = new ObjectId(newProject.id_user)
             await run();
 
+            //verify project exists
+            const resultProjectExists = await collection.findOne({ "title": newProject.title })
+            if (resultProjectExists) {
+                return res.status(400).json({ message: "The title of the project already exists, try another" })
+            }
+
             //check if the user exists to add the new project
             const checkUserExists = await collectionUser.findOne({ "_id": id_user })
             if (!checkUserExists) {
@@ -65,7 +71,7 @@ class ProjectController {
 
             //check if the user is trying to change the project author (id_user)
             if ("id_user" in modifiedProject) {
-                return res.status(400).json({ message: "It is not possible to change the project author" });
+                delete modifiedProject.id_user
             }
 
             await run();
