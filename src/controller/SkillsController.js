@@ -109,11 +109,11 @@ class SkillController {
     static async updateSkill(req, res, next) {
         try {
             const id_Skill = new ObjectId(req.params.id);
-            const modifiedSkill = req.body;
+            const modifiedSkill = req.body
 
             //check if the user is trying to change the project author (id_user)
             if ("id_user" in modifiedSkill) {
-                return res.status(400).json({ message: "It is not possible to change the skill author" });
+                delete modifiedSkill.id_user
             }
 
             await run();
