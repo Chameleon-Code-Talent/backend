@@ -9,20 +9,30 @@ async function verifyToken(req, res, next) {
         const collection = database.collection("users");
         let id_user;
 
+        await run();
         //choose the request where the user id is being provided
-        if (req.body.id_user) {
-            id_user = new ObjectId(req.body.id_user);
-        } else if (req.params.id) {
+        if (!req.body.id_user) {
             id_user = new ObjectId(req.params.id);
+            //if user not exists
+            const result = await collection.findOne({ "_id": id_user }, { projection: { password: 0, token: 0 } });
+            if (!result) {
+                return res.status(404).json({ message: "User not found" });
+            }
+        } else {
+            id_user = new ObjectId(req.body.id_user);
+            //if user not exists
+            const result = await collection.findOne({ "_id": id_user }, { projection: { password: 0, token: 0 } });
+            if (!result) {
+                return res.status(404).json({ message: "User not found" });
+            }
         };
 
-        await run()
         const uniqueToken = await collection.findOne({ "_id": id_user }, { projection: { "token": 1, "_id": 0 } })
         await closeBd();
 
         //return null of the uniqueToken
         if (!uniqueToken.token) {
-            return res.status(401).json({ message: "Token not found" })
+            return res.status(404).json({ message: "Token not found" })
         }
 
         //tranform unique token in string
