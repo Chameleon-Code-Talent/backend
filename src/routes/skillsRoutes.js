@@ -9,8 +9,8 @@ const route = express.Router();
 route.get("/skills", SkillsController.searchSkills);
 route.get("/skills/:id", SkillsController.searchSkillById);
 route.post("/skills", verifyToken, SkillsController.registerSkill);
-route.put("/skills/:id", SkillsController.updateSkill);
-route.delete("/skills/:id", SkillsController.deleteSkill);
+route.put("/skills/:id", verifyToken, SkillsController.updateSkill);
+route.delete("/skills/:id", verifyToken, SkillsController.deleteSkill);
 
 route.use(errorManipulation);
 
