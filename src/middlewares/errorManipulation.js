@@ -1,16 +1,10 @@
-import express from "express";
 import BaseError from "./errors/BaseError.js";
 import AccessError from "./errors/AccessError.js";
-import UserController from "../controller/UserController.js";
-import verifyToken from "./verifyToken.js";
 import { BSON } from "mongodb";
 import BSONErrorManipulation from "../middlewares/errors/BSONErrorManipulation.js";
 import ValidationError from "./errors/ValidationError.js";
 
-
 function errorManipulation(erro, req, res, next) {
-
-    console.log({ MensagemErro: erro })
 
     //mongodb errors
     if (erro instanceof BSON.BSONError) {
@@ -48,9 +42,11 @@ function errorManipulation(erro, req, res, next) {
         erro.message === "secret or public key must be provided" ||
         erro.message === "jwt must be provided") {
         return new AccessError().sendResponse(res);
-    } else {
-        new BaseError().sendResponse(res);
-    };
+    }
+
+    new BaseError().sendResponse(res);
+
+
 };
 
 export default errorManipulation;
