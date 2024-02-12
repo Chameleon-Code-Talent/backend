@@ -7,8 +7,10 @@ import manipulator404 from "./middlewares/manipulator404.js";
 const app = express();
 //importing json middlewares 
 app.use(express.json());
-app.use(errorManipulation);
+
 routes(app);
 
+app.use(errorManipulation);
 app.use(manipulator404);
+
 export default app;
