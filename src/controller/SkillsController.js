@@ -148,6 +148,14 @@ class SkillController {
         try {
             await run();
             const Skill = new ObjectId(req.params.id);
+
+            //Check if the user trying to update the service has permission            
+            const resultPermissionDelete = await collection.findOne({ "_id": req.params.id }, { projection: { "_id": 0, "id_user": 1 } });
+
+            if (resultPermissionDelete != req.body.id_user) {
+                return res.status(400).json({ message: "You do not have permission to delete this data!" })
+            }
+
             const result = await collection.deleteOne({ "_id": Skill });
             await closeBd();
             if (result.deletedCount == 0) {

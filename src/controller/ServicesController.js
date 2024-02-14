@@ -116,17 +116,24 @@ class ServiceController {
         }
     };
 
-    static async updateService(req, res) {
+    static async updateService(req, res, next) {
         try {
-            const id_Service = new ObjectId(req.params.id);
+            const id_Service = new ObjectId(String(req.params.id));
             const modifiedService = req.body;
+
+            await run();
+
+            //Check if the user trying to update the service has permission            
+            const resultPermissionUpdate = await collection.findOne({ "_id": id_Service }, { projection: { "_id": 0, "id_user": 1 } });
+            if (resultPermissionUpdate != req.body.id_user) {
+                return res.status(400).json({ message: "You do not have permission to change this data!" })
+            }
 
             //check if the user is trying to change the project author (id_user)
             if ("id_user" in modifiedService) {
-                return res.status(400).json({ message: "It is not possible to change the project author" });
+                delete modifiedService.id_user
             }
 
-            await run();
             const result = await collection.updateOne({ "_id": id_Service }, { $set: modifiedService });
             await closeBd();
 
@@ -141,11 +148,19 @@ class ServiceController {
         };
     };
 
-    static async deleteService(req, res) {
+    static async deleteService(req, res, next) {
         try {
             await run();
-            const Service = new ObjectId(req.params.id);
-            const result = await collection.deleteOne({ "_id": Service });
+            const service = new ObjectId(req.params.id);
+
+            //Check if the user trying to update the service has permission            
+            const resultPermissionDelete = await collection.findOne({ "_id": req.params.id }, { projection: { "_id": 0, "id_user": 1 } });
+
+            if (resultPermissionDelete != req.body.id_user) {
+                return res.status(400).json({ message: "You do not have permission to delete this data!" })
+            }
+
+            const result = await collection.deleteOne({ "_id": service });
             await closeBd();
             if (result.deletedCount == 0) {
                 res.status(200).json({ mensage: "No Service deleted!" });
