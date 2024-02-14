@@ -105,7 +105,6 @@ class SkillController {
                 return res.status(404).json({ message: "'The user you are trying to add a new project to does not exist, please check the user id!" })
             }
 
-
             const result = await collection.insertOne(newSkill);
 
             //check if the new user was created
@@ -130,6 +129,24 @@ class SkillController {
             }
 
             await run();
+
+            //Check if the user trying to update the service has permission            
+            const resultPermissionUpdate = await collection.findOne({ "_id": id_Skill }, { projection: { "_id": 0, "id_user": 1 } });
+            if (resultPermissionUpdate != req.body.id_user) {
+                return res.status(400).json({ message: "You do not have permission to change this data!" })
+            }
+
+            //configure icons patterns for saved in BD
+            if (!modifiedSkill.icon_skill || modifiedSkill.icon_skill == "" || modifiedSkill.icon_skill == [""]) {
+                //variable in escope local for saved icons_skills patterns
+                let iconsPatterns = [];
+
+                modifiedSkill.skills.forEach(element => {
+                    iconsPatterns.push(`no-icon-${element}`);
+                    modifiedSkill.icon_skill = iconsPatterns;
+                });
+            }
+
             const result = await collection.updateOne({ "_id": id_Skill }, { $set: modifiedSkill });
             await closeBd();
 

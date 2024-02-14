@@ -121,6 +121,11 @@ class ServiceController {
             const id_Service = new ObjectId(String(req.params.id));
             const modifiedService = req.body;
 
+            //check if the user is trying to change the project author (id_user)
+            if ("id_user" in modifiedService) {
+                delete modifiedService.id_user
+            }
+
             await run();
 
             //Check if the user trying to update the service has permission            
@@ -129,9 +134,15 @@ class ServiceController {
                 return res.status(400).json({ message: "You do not have permission to change this data!" })
             }
 
-            //check if the user is trying to change the project author (id_user)
-            if ("id_user" in modifiedService) {
-                delete modifiedService.id_user
+            //configure icons patterns for saved in BD
+            if (!modifiedService.icon_skill || modifiedService.icon_skill == "" || modifiedService.icon_skill == [""]) {
+                //variable in escope local for saved icons_skills patterns
+                let iconsPatterns = [];
+
+                modifiedService.skills.forEach(element => {
+                    iconsPatterns.push(`no-icon-${element}`);
+                    modifiedService.icon_skill = iconsPatterns;
+                });
             }
 
             const result = await collection.updateOne({ "_id": id_Service }, { $set: modifiedService });
