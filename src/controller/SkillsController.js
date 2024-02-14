@@ -44,6 +44,17 @@ class SkillController {
             let addSkill;
             let addIconSkill;
 
+            //configure icons patterns for saved in BD
+            if (!newSkill.icon_skill || newSkill.icon_skill == "" || newSkill.icon_skill == [""]) {
+                //variable in escope local for saved icons_skills patterns
+                let iconsPatterns = [];
+
+                newSkill.skills.forEach(element => {
+                    iconsPatterns.push(`no-icon-${element}`);
+                    newSkill.icon_skill = iconsPatterns;
+                });
+            }
+
             await run();
             //verify skills exists
             const skillExists = await collection.find().toArray();
@@ -82,6 +93,7 @@ class SkillController {
 
                 const result = await collection.updateOne({ "_id": IdDocument }, { $set: modifiedSkill });
                 await closeBd();
+
                 return res.status(200).json({ message: "New skills inserted succesfully" })
             }
 
@@ -92,6 +104,7 @@ class SkillController {
             if (!checkUserExists) {
                 return res.status(404).json({ message: "'The user you are trying to add a new project to does not exist, please check the user id!" })
             }
+
 
             const result = await collection.insertOne(newSkill);
 

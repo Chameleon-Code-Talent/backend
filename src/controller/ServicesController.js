@@ -45,6 +45,16 @@ class ServiceController {
             let addService;
             let addIconService;
 
+            //configure icons patterns for saved in BD
+            if (!newService.icon_service || newService.icon_service == "" || newService.icon_service == [""]) {
+                //variavbe in escope local for saved icons_service patterns
+                let iconsPatterns = [];
+
+                newService.services.forEach(element => {
+                    iconsPatterns.push(`no-icon-${element}`);
+                    newService.icon_service = iconsPatterns;
+                });
+            }
             await run();
             //verify services exists
             const servicesExists = await collection.find().toArray();
